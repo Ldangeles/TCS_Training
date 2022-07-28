@@ -6,10 +6,12 @@ public class FrontEnd {
 
     private Scanner in;
     private UserController userController;
+    private VideoController videoController;
 
     public FrontEnd() {
         this.in = new Scanner(System.in);
         this.userController = new UserController();
+        this.videoController = new VideoController();
     }
 
     public void run() {
@@ -20,24 +22,44 @@ public class FrontEnd {
             switch (option) {
                 case 1 -> this.login();
                 case 2 -> this.signup();
-                case 3 -> this.runAdmin();
+                case 3 -> this.adminLogin();
                 case 4 -> this.runExit();
             }
         }
     }
 
     private void runAdmin() {
-        int option = 0;
-        this.adminLogin();
+
         printAdminMenu();
-        option = this.in.nextInt();
+        int option = this.in.nextInt();
         switch (option) {
             case 1 -> this.getUserList();
-            case 2 -> this.runExit();
+            case 2 -> this.getVideoList();
+            case 3 -> this.runExit();
+        }
+    }
+
+    private void runExit() {
+        this.printExitMenu();
+        System.exit(0);
+    }
+
+    private void runUser() {
+
+        this.printUserMenu();
+        int option = this.in.nextInt();
+        switch (option) {
+            case 1 -> this.postVideo();
+            case 2 -> this.deleteUser();
+            case 3 -> this.runExit();
         }
     }
 
     private void printMainMenu() {
+        System.out.print("""
+                ------------
+                MAIN MENU
+                ------------\n""");
         System.out.print("""
                 Select Option:
                 1: Login
@@ -49,7 +71,7 @@ public class FrontEnd {
 
     private void printUserMenu() {
         System.out.print("""
-                1: Update User
+                1: Post Video
                 2: Delete User
                 3: EXIT
                 >\s""");
@@ -58,13 +80,9 @@ public class FrontEnd {
     private void printAdminMenu() {
         System.out.print("""
                 1: User List
-                2: EXIT
+                2: Video List
+                3: EXIT
                 >\s""");
-    }
-
-    private void runExit() {
-        this.printExitMenu();
-        System.exit(0);
     }
 
     private void printExitMenu() {
@@ -88,32 +106,18 @@ public class FrontEnd {
 
     }
 
-    private void runUser() {
 
-        this.printUserMenu();
-        int option = this.in.nextInt();
-        switch (option) {
-            case 1 -> this.updateUser();
-            case 2 -> this.deleteUser();
-            case 3 -> this.runExit();
-        }
-    }
+    private void postVideo(){
+        System.out.print("\nEnter title: ");
+        String title = this.in.next();
+        System.out.print("\nEnter description: ");
+        String description = this.in.next();
+        System.out.print("\nEnter duration: ");
+        int duration = this.in.nextInt();
 
-    private void updateUser() {
-        System.out.print("\nEnter email: ");
-        String email = this.in.next();
-        System.out.print("\nEnter first name: ");
-        String firstName = this.in.next();
-        System.out.print("\nEnter last name: ");
-        String lastName = this.in.next();
-        System.out.print("\nEnter age: ");
-        int age = this.in.nextInt();
-        System.out.print("\nEnter password: ");
-        String password = this.in.next();
+        Video video = new Video(title, description, duration);
 
-        User user = new User(firstName, lastName, age, email, password);
-
-        this.userController.updateUser(user);
+        this.videoController.createVideo(video);
     }
 
     private void deleteUser() {
@@ -126,23 +130,24 @@ public class FrontEnd {
     }
 
     private void signup() {
-        System.out.print("\nEnter first name: ");
-        String firstName = this.in.next();
-        System.out.print("\nEnter last name: ");
-        String lastName = this.in.next();
-        System.out.print("\nEnter age: ");
-        int age = this.in.nextInt();
+        System.out.print("\nEnter username: ");
+        String username = this.in.next();
         System.out.print("\nEnter email: ");
         String email = this.in.next();
         System.out.print("\nEnter password: ");
         String password = this.in.next();
 
-        User user = new User(firstName, lastName, age, email, password);
+        User user = new User(username, email, password);
 
         this.userController.createUser(user);
     }
 
     private void adminLogin() {
+        System.out.print("""
+                ------------
+                ADMIN LOGIN
+                ------------""");
+
         System.out.print("\nEnter email: ");
         String email = this.in.next();
         System.out.print("\nEnter password: ");
@@ -150,6 +155,7 @@ public class FrontEnd {
 
         if(email.equals("admin") && password.equals("admin")) {
             System.out.println("Login Successful");
+            runAdmin();
         } else {
             System.out.println("Wrong Email or Password");
         }
@@ -163,6 +169,18 @@ public class FrontEnd {
         } else {
             for(User user : users) {
                 System.out.println(user);
+            }
+        }
+    }
+
+    private void getVideoList() {
+        List<Video> videos = this.videoController.getVideoList();
+
+        if(videos.size() == 0) {
+            System.out.println("Empty video list");
+        } else {
+            for(Video video : videos) {
+                System.out.println(video);
             }
         }
     }
