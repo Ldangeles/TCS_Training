@@ -4,9 +4,7 @@ public class Video {
     private String title;
     private String description;
     private int duration;
-    private String username;
-
-    public Video() {}
+    final private String username;
 
     public Video(String title, String description, int duration, String username) {
         this.title = title;

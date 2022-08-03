@@ -3,7 +3,7 @@ package ClickClock;
 import java.util.List;
 
 public class UserController {
-    private UserService userService;
+    final private UserService userService;
 
     public UserController() {
         this.userService = new UserService();
@@ -29,8 +29,8 @@ public class UserController {
         this.userService.deleteUser(user);
     }
 
-    public void createVideo(Video video) {
-        this.userService.createVideo(video);
+    public void postVideo(Video video) {
+        this.userService.postVideo(video);
     }
 
     public List<Video> getVideoList () {

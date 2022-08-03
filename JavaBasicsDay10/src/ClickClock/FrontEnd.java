@@ -17,46 +17,114 @@ public class FrontEnd {
     }
 
     public void run() {
-        boolean success = false;
+        boolean isExiting = false;
         int option = 0;
 
-        while (!success) {
-            this.printMainMenu();
+        while (!isExiting){
+            boolean isAnOption = false;
 
-            try {
-                option = this.in.nextInt();
-
-                if (option > 4) {
-                    throw new IllegalArgumentException();
-                }
-                success = true;
-            } catch (InputMismatchException exception){
-                System.out.println("Please select one of the options");
+            while (!isAnOption) {
                 this.printMainMenu();
-                option = this.in.nextInt();
-            } catch (IllegalArgumentException exception){
-                System.out.println("Please select one of the options");
+
+                try {
+                    option = this.in.nextInt();
+
+                    if (option > 4) {
+                        throw new IllegalArgumentException();
+                    }
+                    isAnOption = true;
+                } catch (InputMismatchException exception){
+                    System.out.println("Please use a NUMBER to select one of the options below\n");
+                    in.next();
+                } catch (IllegalArgumentException exception){
+                    System.out.println("Please select one of the options\n");
+                }
+
             }
 
-        }
+            if (option == 4)
+                isExiting = true;
 
-        switch (option) {
-            case 1 -> this.login();
-            case 2 -> this.signup();
-            case 3 -> this.adminLogin();
-            case 4 -> this.runExit();
+            switch (option) {
+                case 1 -> this.login();
+                case 2 -> this.signup();
+                case 3 -> this.adminLogin();
+                case 4 -> this.runExit();
+            }
         }
 
     }
 
-    private void runAdmin() {
+    private void runUser() {
 
-        printAdminMenu();
-        int option = this.in.nextInt();
-        switch (option) {
-            case 1 -> this.adminService.getUserList(this.userController);
-            case 2 -> this.adminService.getVideoList(this.userController);
-            case 3 -> this.runExit();
+        boolean isExiting = false;
+        int option = 0;
+
+        while (!isExiting) {
+            boolean isAnOption = false;
+
+            while (!isAnOption) {
+                this.printUserMenu();
+                try {
+                    option = this.in.nextInt();
+
+                    if (option > 4) {
+                        throw new IllegalArgumentException();
+                    }
+                    isAnOption = true;
+                } catch (InputMismatchException exception) {
+                    System.out.println("Please use a NUMBER to select one of the options below\n");
+                    in.next();
+                } catch (IllegalArgumentException exception) {
+                    System.out.println("Please select one of the options\n");
+                }
+
+            }
+
+            if (option == 4)
+                isExiting = true;
+
+            switch (option) {
+                case 1 -> this.postVideo();
+                case 2 -> this.getVideoList();
+                case 3 -> this.deleteUser();
+                case 4 -> this.run();
+            }
+        }
+    }
+
+    private void runAdmin() {
+        boolean isExiting = false;
+        int option = 0;
+
+        while (!isExiting) {
+            boolean isAnOption = false;
+
+            while (!isAnOption) {
+                printAdminMenu();
+                try {
+                    option = this.in.nextInt();
+
+                    if (option > 3) {
+                        throw new IllegalArgumentException();
+                    }
+                    isAnOption = true;
+                } catch (InputMismatchException exception) {
+                    System.out.println("Please use a NUMBER to select one of the options below\n");
+                    in.next();
+                } catch (IllegalArgumentException exception) {
+                    System.out.println("Please select one of the options\n");
+                }
+            }
+
+            if (option == 3)
+                isExiting = true;
+
+            switch (option) {
+                case 1 -> this.adminService.getUserList(this.userController);
+                case 2 -> this.adminService.getVideoList(this.userController);
+                case 3 -> this.run();
+            }
         }
     }
 
@@ -65,19 +133,11 @@ public class FrontEnd {
         System.exit(0);
     }
 
-    private void runUser() {
-
-        this.printUserMenu();
-        int option = this.in.nextInt();
-        switch (option) {
-            case 1 -> this.postVideo();
-            case 2 -> this.getVideoList();
-            case 3 -> this.deleteUser();
-            case 4 -> this.runExit();
-        }
-    }
-
     private void login() {
+        System.out.print("""
+                ------------
+                USER LOGIN
+                ------------""");
         System.out.print("\nEnter username: ");
         String username = this.in.next();
         System.out.print("\nEnter password: ");
@@ -91,19 +151,6 @@ public class FrontEnd {
             System.out.println("Wrong username or password");
         }
 
-    }
-
-    private void postVideo(){
-        System.out.print("\nEnter title: ");
-        String title = this.in.next();
-        System.out.print("\nEnter description: ");
-        String description = this.in.next();
-        System.out.print("\nEnter duration: ");
-        int duration = this.in.nextInt();
-
-        Video video = new Video(title, description, duration, userController.getActualUser().getUsername());
-
-        this.userController.createVideo(video);
     }
 
     private void getVideoList() {
@@ -128,16 +175,71 @@ public class FrontEnd {
     }
 
     private void signup() {
-        System.out.print("\nEnter username: ");
-        String username = this.in.next();
-        System.out.print("\nEnter email: ");
-        String email = this.in.next();
-        System.out.print("\nEnter password: ");
-        String password = this.in.next();
+        boolean isAvailable = false;
+        System.out.print("""
+                ------------
+                USER SIGNUP
+                ------------""");
 
-        User user = new User(username, email, password);
+        while (!isAvailable) {
 
-        this.userController.createUser(user);
+            System.out.print("\nEnter username: ");
+            String username = this.in.next();
+            System.out.print("\nEnter email: ");
+            String email = this.in.next();
+            System.out.print("\nEnter password: ");
+            String password = this.in.next();
+
+            User user = new User(username, email, password);
+
+            try {
+                this.userController.createUser(user);
+                isAvailable = true;
+            } catch (IllegalArgumentException exception) {
+                System.out.println("Username or Email already in use");
+            }
+        }
+    }
+
+    private void postVideo(){
+        boolean isAvailable = false;
+
+        while (!isAvailable) {
+            System.out.print("\nEnter title: ");
+            String title = this.in.next();
+            System.out.print("\nEnter description: ");
+            String description = this.in.next();
+
+            boolean isUnder5min = false;
+            int duration = 0;
+
+            while(!isUnder5min){
+                try {
+                    System.out.print("\nEnter duration in seconds: ");
+                    duration = this.in.nextInt();
+                    if (duration > 300) {
+                        throw new IllegalArgumentException();
+                    } else {
+                        isUnder5min = true;
+                    }
+                } catch (IllegalArgumentException exception){
+                    System.out.println("Video duration must be under 5 min (300 s)");
+                } catch (InputMismatchException exception){
+                    System.out.println("Please use a number to assign the video duration");
+                    in.next();
+                }
+            }
+
+            Video video = new Video(title, description, duration, userController.getActualUser().getUsername());
+
+            try {
+                this.userController.postVideo(video);
+                isAvailable = true;
+            } catch (IllegalArgumentException exception) {
+                System.out.println("Title already in use");
+            }
+
+        }
     }
     private void adminLogin() {
         System.out.print("""
@@ -174,19 +276,27 @@ public class FrontEnd {
     }
 
     private void printUserMenu() {
+        System.out.println("""
+                ------------
+                USER MENU
+                ------------""");
         System.out.print("""
                 1: Post Video
                 2: Video List
                 3: Delete User
-                4: EXIT
+                4: EXIT MAIN MENU
                 >\s""");
     }
 
     private void printAdminMenu() {
+        System.out.println("""
+                ------------
+                ADMIN MENU
+                ------------""");
         System.out.print("""
                 1: User List
                 2: Video List
-                3: EXIT
+                3: EXIT MAIN MENU
                 >\s""");
     }
 

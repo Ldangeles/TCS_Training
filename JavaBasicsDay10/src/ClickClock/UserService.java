@@ -12,8 +12,23 @@ public class UserService {
     }
 
     public void createUser(User user) {
+        for (User u : this.users) {
+            if (u.getUsername().equals(user.getUsername()) || u.getEmail().equals(user.getEmail())) {
+                throw new IllegalArgumentException();
+            }
+        }
         this.users.add(user);
     } //Add a user to users LinkedList
+    public void postVideo(Video video){
+        for (Video v : this.actualUser.getVideoList()) {
+            if (v.getTitle().equals(video.getTitle())) {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        this.actualUser.postVideo(video);
+    } //Creates a video instance with a method from the actualUser instance
+
     public User getActualUser() {
         return actualUser;
     } //Getter for "actualUser" instance of User
@@ -30,7 +45,7 @@ public class UserService {
 
     public List<User> getUserList () {
         return this.users;
-    } //Getter fot the complete users LinkedList
+    } //Getter for the complete users LinkedList
 
     public User getUser(User user) {
         //for(int i = 0; i < this.users.size(); i++)
@@ -53,13 +68,9 @@ public class UserService {
         }
     }
 
-    public void createVideo(Video video){ //Creates a video instance with a method from the actualUser instance
-        this.actualUser.createVideo(video);
-    }
-
-    public List<Video> getVideoList () { //Returns the video LinkedList inside the actualUser instance
+    public List<Video> getVideoList () {
         return actualUser.getVideoList();
-    }
+    } //Returns the video LinkedList inside the actualUser instance
 
     public List<Video> getAllVideoList () {
         List<Video> videos = new LinkedList<Video>(); // Create a LL to save ALL videos from all User instances
@@ -74,7 +85,7 @@ public class UserService {
         }*/
 
         for (User u : this.users) { //Iterates in every User instance inside users LL
-            List<Video> temp = u.getVideoList(); //Save LL from especific user in temp
+            List<Video> temp = u.getVideoList(); //Save LL from specific user in temp
             videos.addAll(temp); //Save all Video instances inside temp into videos LL
         }
         return videos;

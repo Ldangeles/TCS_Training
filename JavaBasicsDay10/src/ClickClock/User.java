@@ -14,11 +14,33 @@ public class User {
         this.videos = new LinkedList<Video>();
     }
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+
+        this.videos = new LinkedList<Video>();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    public String getEmail() {
+        return email;
+    }
     public List<Video> getVideoList () {
         return this.videos;
     }
+    public String getPassword() {
+        return password;
+    }
 
-    public void createVideo(Video video) {
+    public void postVideo(Video video) {
+        for (Video v : this.videos) {
+            if (v.getTitle().equals(video.getTitle())) {
+                throw new IllegalArgumentException();
+            }
+        }
         this.videos.add(video);
     }
 
@@ -32,32 +54,8 @@ public class User {
         }
     }
 
-    public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-
-        this.videos = new LinkedList<Video>();
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -67,7 +65,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [username=" + username + ", email=" + email + "]";
+        return "User [username= " + username + ", email= " + email +", # of videos= "+this.videos.size()+"]";
     }
 
 }
