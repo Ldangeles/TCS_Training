@@ -4,13 +4,15 @@ public class Video {
     private String title;
     private String description;
     private int duration;
+    private String username;
 
     public Video() {}
 
-    public Video(String title, String description, int duration) {
+    public Video(String title, String description, int duration, String username) {
         this.title = title;
         this.description = description;
         this.duration = duration;
+        this.username = username;
     }
 
     public String getTitle() {
@@ -39,7 +41,7 @@ public class Video {
 
     @Override
     public String toString() {
-        return "User [title=" + title + ", description=" + description + ", duration= "+duration+"]";
+        return "Video [title= " + title + ", description= " + description + ", duration= "+duration+", username= "+username+"]";
     }
 
 }

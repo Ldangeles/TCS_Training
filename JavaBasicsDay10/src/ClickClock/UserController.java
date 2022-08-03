@@ -17,11 +17,27 @@ public class UserController {
         return userService.getUserList();
     }
 
+    public List<Video> getAllVideoList () {
+        return userService.getAllVideoList();
+    }
+
     public void createUser(User user) {
         this.userService.createUser(user);
     }
 
     public void deleteUser(User user) {
         this.userService.deleteUser(user);
+    }
+
+    public void createVideo(Video video) {
+        this.userService.createVideo(video);
+    }
+
+    public List<Video> getVideoList () {
+        return userService.getVideoList();
+    }
+
+    public User getActualUser() {
+        return this.userService.getActualUser();
     }
 }
