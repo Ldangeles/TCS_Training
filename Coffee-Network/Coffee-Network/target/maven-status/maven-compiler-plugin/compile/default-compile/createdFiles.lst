@@ -1,0 +1,6 @@
+com\Coffee\CoffeeNetwork\models\Post.class
+com\Coffee\CoffeeNetwork\models\User.class
+com\Coffee\CoffeeNetwork\CoffeeNetworkApplication.class
+com\Coffee\CoffeeNetwork\services\CoffeeUserDetailsService.class
+com\Coffee\CoffeeNetwork\repositories\PostRepository.class
+com\Coffee\CoffeeNetwork\repositories\UserRepository.class
