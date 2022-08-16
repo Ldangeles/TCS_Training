@@ -1,0 +1,73 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    background-color: black;
+    color: yellow;
+    font-family: 'Star Jedi', arial;
+    letter-spacing: 0.1ch;
+
+    background-size: cover; /* Add this line */
+    background-position: center center; /* Add this line */
+    background-repeat: repeat; /* Add this line */
+    background-attachment: scroll; /* Add this line */
+
+
+    background-image: linear-gradient(rgba(5,5,5,0.85),rgba(5,5,5,0.85)), url('../images/star-wars-the-force-awakens-trailer.jpg.crdownload');
+}
+
+h2{
+    letter-spacing: 0.1ch;
+}
+
+table strong {
+    letter-spacing: 0.2ch;
+}
+
+table {
+    letter-spacing: 0.1ch;
+}
+
+
+td {
+    padding: 0.5rem;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tr:nth-child(odd) {
+    background-color: #222222;  
+}
+
+tr:nth-child(even) {
+    background-color: #333333;
+}
+
+main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 1rem;
+    column-gap: 1rem;
+    padding: 1rem;
+}
+
+@media screen and (min-width: 1400px) {
+    main{
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    main{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+footer{
+    padding: 3rem;
+    display:flex;
+}
