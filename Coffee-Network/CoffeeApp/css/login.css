@@ -1,0 +1,13 @@
+label {
+    display: block;
+}
+
+.field {
+    margin-bottom: 1rem;
+}
+
+input {
+    background-color:  #FFEBC9;
+    width: 40%;
+    padding: 0.2rem;
+}

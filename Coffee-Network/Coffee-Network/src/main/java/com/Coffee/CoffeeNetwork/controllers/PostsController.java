@@ -1,13 +1,16 @@
 package com.Coffee.CoffeeNetwork.controllers;
 
 import com.Coffee.CoffeeNetwork.models.Post;
+import com.Coffee.CoffeeNetwork.models.User;
 import com.Coffee.CoffeeNetwork.repositories.PostRepository;
+import com.Coffee.CoffeeNetwork.repositories.UserRepository;
 import com.Coffee.CoffeeNetwork.requests.CreatePostRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,9 +19,11 @@ import java.util.List;
 public class PostsController {
 
     private PostRepository postRepository;
+    private UserRepository userRepository;
 
-    public PostsController(@Autowired PostRepository postRepository){
+    public PostsController(@Autowired PostRepository postRepository, @Autowired UserRepository userRepository){
             this.postRepository = postRepository;
+            this.userRepository = userRepository;
     }
 
     @GetMapping("")
@@ -27,9 +32,11 @@ public class PostsController {
     }
 
     @PostMapping("")
-    public void createPost(@RequestBody CreatePostRequest request){
+    public void createPost(@RequestBody CreatePostRequest request, Principal principal){
+        User user= currentUser(principal);
         Post post = new Post();
         post.setContent(request.getContent());
+        post.setUser(user);
         postRepository.save(post);
     }
 
@@ -59,6 +66,15 @@ public class PostsController {
 
         postRepository.delete(post);
     }
+
+    private User currentUser (Principal principal){
+        String username = principal.getName();
+        User user = userRepository.findByUsername(username)
+        .orElseThrow( ()-> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
+        return user;
+    }
+    
 
 }
 

@@ -24,4 +24,10 @@ public class Post {
     @Getter
     private Date createdAt;
 
+    @ManyToOne
+    @JoinColumn(name="users_id")
+    @Getter
+    @Setter
+    private User user;
+
 }

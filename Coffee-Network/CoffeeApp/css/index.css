@@ -1,0 +1,28 @@
+  .posts {
+    background-color: #603601;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+
+
+  
+  textarea {
+    width: 100%;
+    resize: none;
+    border-color: #361500;
+    background-color: #D79771;
+    color: white;
+    font-family: sans-serif;
+    font-size: 16px;
+    padding: 0.5rem;
+  }
+  
+  textarea:focus {
+    outline: solid 2px #361500;
+  }
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+  }
+  

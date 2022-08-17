@@ -11,16 +11,20 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.Coffee.CoffeeNetwork.filters.JWTFilter;
 import com.Coffee.CoffeeNetwork.services.CoffeeUserDetailsService;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     private CoffeeUserDetailsService userDetailsService;
+    private JWTFilter jwtFilter;
 
-    public WebSecurityConfig (@Autowired CoffeeUserDetailsService userDetailsService){
+    public WebSecurityConfig (@Autowired CoffeeUserDetailsService userDetailsService, @Autowired JWTFilter jwtFilter){
         this.userDetailsService = userDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -36,11 +40,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .antMatchers(HttpMethod.POST, "/login", "/signup").permitAll()
             .anyRequest()
-                .authenticated().and()
-                    .csrf().disable()
-                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .authenticated()
+            .and()
+                .csrf().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

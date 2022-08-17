@@ -3,7 +3,11 @@ package com.Coffee.CoffeeNetwork.models;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -20,5 +24,9 @@ public class User {
 
     @Getter
     @Setter
+    @JsonIgnore
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 }

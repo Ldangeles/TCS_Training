@@ -27,5 +27,12 @@ public class JWTService {
         .setExpiration(new Date(System.currentTimeMillis() + ttl*1000))
         .signWith(key).compact();
     }
-    
+
+    public String getUsername(String token){
+        return Jwts.parserBuilder()
+        .setSigningKey(key).build()
+        .parseClaimsJws(token)
+        .getBody().getSubject();
+    }
+
 }
