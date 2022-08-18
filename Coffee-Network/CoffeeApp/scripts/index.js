@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
   
-    const $logout = document.getElementById("logout");
     const $main = document.getElementById('main');
   
     fetch(COFFEE_API, 
@@ -28,9 +27,36 @@ document.addEventListener('DOMContentLoaded', function() {
         $main.innerHTML = postsHtml.join('');
       })
 
+    const $logout = document.getElementById("logout");
     $logout.addEventListener('click', function(){
         sessionStorage.removeItem("token");
         location.reload();
     });
+
+
+    const $addPost = document.getElementById('addPost');
+    $addPost.addEventListener('submit', function(event){
+      event.preventDefault(); //Cancelamos el refresh de la pagina (Condicion de carrera)
+      
+      const formData = new FormData($addPost); //Object which accepts a form object
+      const jsonData = Object.fromEntries(formData.entries());
+
+      console.log(JSON.stringify(jsonData));
+
+      fetch(COFFEE_API,{
+        method: 'POST', 
+        body: JSON.stringify(jsonData),
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json"}
+      }).then(function(){
+        location.reload();
+      }).catch(function(){
+        console.error("Post failed to create")
+      });
+
+  });
+
+
   
   });
